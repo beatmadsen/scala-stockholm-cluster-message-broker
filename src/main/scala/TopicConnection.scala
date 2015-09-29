@@ -26,7 +26,6 @@ class TopicConnection(topic: String) extends Actor with ActorLogging {
 
   val id = UUID.randomUUID()
 
-  // TODO subscribe to topic
   val mediator = DistributedPubSub(context.system).mediator
 
   mediator ! Subscribe(topic, self)

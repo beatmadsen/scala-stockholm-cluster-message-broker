@@ -8,9 +8,6 @@ object Backend {
 }
 
 
-/**
- * Publishes http endpoints "/" and "/[topic]" and websocket endpoint "/[topic]/ws"
- */
 class Backend(host: String, port: Int) extends Actor with ActorLogging {
 
 

@@ -1,4 +1,4 @@
-import akka.actor.{Props, Address, RootActorPath, ActorSystem}
+import akka.actor._
 import akka.cluster.Cluster
 import akka.cluster.client.ClusterClientReceptionist
 import akka.cluster.pubsub.DistributedPubSub
@@ -13,7 +13,7 @@ object ClusterApp extends App {
   import Utils._
 
   val (ip, port) = args.toList match {
-    case IpPort(ip, port) :: Nil => (ip, port.toInt)
+    case IpPort(i, p) :: Nil => (i, p.toInt)
     case _ =>
       throw new RuntimeException("Invalid startup parameters\nUsage: server [ip:port] (port must be 2551 and upwards)")
   }
@@ -30,10 +30,9 @@ object ClusterApp extends App {
       | }
     """.stripMargin).withFallback(ConfigFactory.load("cluster"))
 
-  val system = ActorSystem("ChatCluster", config)
+  val system: ActorSystem = ActorSystem("ChatCluster", config)
 
-  val webPort = 9000 + port - 2551
-  val webserver = system.actorOf(Backend.props(ip, webPort), "webserver")
+  val backend: ActorRef = system.actorOf(Backend.props(ip, port), "backend")
 
   println("Node started. Kill with 'q' + enter")
   Stream.continually(StdIn.readLine()).takeWhile(_ != "q")
