@@ -33,7 +33,7 @@ object ClusterApp extends App {
   val system = ActorSystem("ChatCluster", config)
 
   val webPort = 9000 + port - 2551
-  val webserver = system.actorOf(WebServer.props(ip, webPort), "webserver")
+  val webserver = system.actorOf(Backend.props(ip, webPort), "webserver")
 
   println("Node started. Kill with 'q' + enter")
   Stream.continually(StdIn.readLine()).takeWhile(_ != "q")
